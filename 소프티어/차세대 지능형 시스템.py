@@ -1,16 +1,10 @@
-n,t = map(int,input().split())
+n,t = map(int,input().split()) #격자 배열의 크기, 시간
 
 signal = []
-for row in range(n):
-    temp = []
-    for col in range(n):
-        temp.append(list(map(int,input().split())))
-    signal.append(temp)
-from pprint import pprint
-# print(n,t)
-# pprint(signal)
+signal = [[list(map(int,input().split())) for _ in range(n)] for _ in range(n)]
 
 signalInfo = [[[0 for _ in range(4)] for _ in range(4)] for _ in range(13)]
+# signalInfo[신호 인덱스][들어가는 방향][나오는 방향]
 signalInfo[1][0][1] = signalInfo[1][0][2] = signalInfo[1][0][3] = 1
 signalInfo[2][1][2] = signalInfo[2][1][3] = signalInfo[2][1][0] = 1
 signalInfo[3][2][3] = signalInfo[3][2][0] = signalInfo[3][2][1] = 1
@@ -22,16 +16,14 @@ for i in range(4):
     signalInfo[i+9][i][(i+1)% 4] = 1
     signalInfo[i+9][i][(i+2)% 4] = 1
 
-# pprint(signalInfo)
-
 junction = [[[0 for _ in range(4)] for _ in range(n)] for _ in range(n)]
 junction[0][0][1] = 1
 junction2 = [[[0 for _ in range(4)] for _ in range(n)] for _ in range(n)]
 visit = [[0 for _ in range(n)] for _ in range(n)]
 visit[0][0] = 1
 def update(time,row,col,inDir,outDir,junction,junction2):
-    signalNow = signal[row][col][time%4]
-    if signalInfo[signalNow][inDir][outDir]:
+    signalNow = signal[row][col][time%4]   #4가지 신호를 무한히 반복하기 땨뮨애 time%4, 4가지 신호를 무한 반복하니 signal[row][col][time%4]
+    if signalInfo[signalNow][inDir][outDir]:  #현재 신호에 in, out이 1이고 그떄 out이 0이면 
         if outDir == 0 and col != 0:
             junction2[row][col-1][2] = 1
             visit[row][col-1] =1
@@ -42,7 +34,7 @@ def update(time,row,col,inDir,outDir,junction,junction2):
             junction2[row][col+1][0] = 1
             visit[row][col+1] =1
         elif outDir ==3 and row != 0:
-            junction2[row-1][col][1]
+            junction2[row-1][col][1] = 1
             visit[row-1][col] =1
     return
 
